@@ -2,10 +2,11 @@
 layout: post
 title:  "Administrar memoria en C"
 date:   2020-05-17 20:25:35 -0500
+author:   "Alejandro Alvarez"
 categories: notas
 ---
 
-Esta semana se me ocurrio volver a hacer una tarea de la universidad que me gusta mucho. Crear un programa en el que se pueda subadministrar un pedazo de memoria, mediante operaciones de fragmentación y defragmentación.
+Esta semana se me ocurrio volver a hacer una tarea de la universidad que me gusta mucho. Crear un programa en el que se pueda subadministrar un pedazo de memoria.
 
 Este pograma debe ser capaz de manejar lo siguiente:
 - Iniciar (N): pedir al sistema operativo un pedazo de memoria de tamaño N bytes, donde N es potencia de 2.
@@ -34,7 +35,7 @@ Si ponemos esas ideas en un diagrama seria algo asi:
 
 Lo siguiente a definir es cómo le vamos a hacer para saber donde empieza un pedazo y termina otro, cual esta reservado y cual disponible. Para lograr esto probablemente hay miles de caminos diferentes, sin embargo, cuando hice esta tarea por primera vez, el tema central eran las listas ligadas.
 
-Creamos una lista ligada con la información que necesitamos en cada nodo: identificador del programa al que pertenece, tamaño del segmento de memoria y los apuntadores a los pedazos de memoria que estan antes y despues.
+Creamos una lista ligada con la información que necesitamos en cada nodo: identificador del programa al que pertenece, tamaño del segmento de memoria y un apuntador al siguiente pedazo de memoria.
 
 {% highlight c %}
 // memoria.h
@@ -44,7 +45,6 @@ typedef struct _header{
     u_int64_t id;
     u_int64_t tamano;
     Cabecera *siguiente;
-    Cabecera *anterior;
 }header;
 
 {% endhighlight %}
@@ -52,8 +52,206 @@ typedef struct _header{
 Con esta lista, nosotros podemos conectar cada uno de los segmentos de memoria, solamente es necesario que en los primeros bytes de cada segmento escribamos el nodo de nuestra lista (Cabecera) y que siempre mantegamos los segmentos conectados correctamente con los apuntadores. Para el proposito de este ejercicio, los pedazos libres los represento con el id 0x0 y los ocupados, con id de una aplicación ficticia, cualquier número diferente que 0x0.
 ![Diagrama de Memoria](/notas/assets/diagrama-memoria-2.png)
 
-Con estas últimas ideas, lo único que falta es rellenar las funciones, cuidando un detalle más, el espacio que ocupa la cabecera. Si solicitamos 64 bytes, debemos reservar al menos esos 64 bytes más el tamaño de la cabecera, por lo tanto, sabiendo que nuestra cabecera mide 32 bytes, al solicitar 64 bytes, realmente se solicitan 64 + 32, resultando en un espacio de 128 al seguir el método de fragmentación que decidimos usar.
+Con estas últimas ideas, lo único que falta es rellenar las funciones, cuidando un detalle más, el espacio que ocupa la cabecera. Si solicitamos 64 bytes, debemos reservar al menos esos 64 bytes más el tamaño de la cabecera, por lo tanto, sabiendo que nuestra cabecera mide 24 bytes, al solicitar 64 bytes, realmente se solicitan 64 + 24, resultando en un espacio de 128 al seguir el método de fragmentación que decidimos usar.
 El tamaño de la cabecera lo podemos obtener de esta forma:
 {% highlight c %}
-u_int64_t TAMANO_CABECERA = 2 * sizeof(u_int64_t) + 2 * sizeof(Cabecera*);
+u_int64_t TAMANO_CABECERA = 2 * sizeof(u_int64_t) + sizeof(Cabecera*);
 {% endhighlight %}
+
+## Como correr pruebas
+Al probar el programa me di cuenta de varias cosas, C permite acceder a direcciones de memoria que no hemos reservado, sin marcar ningun error. Al usar aritmética de apuntadores es fácil que estemos accediendo a una dirección equivocada, con la bandera `-fsanitize=address` al compilar, el programa nos avisa si estamos leyendo o escribiendo en una dirección que no nos corresponde. Además de esa bandera, es bueno usar `-Wall -Werror`, para tratar a todos los warnings como errores.
+{% highlight sh %}
+gcc -Wall -Werror -fsanitize=address memoria.c -o memoria
+./memoria
+{% endhighlight %}
+
+## Aritmética de apuntadores
+Al incializar nuestro programa, pediremos al sistema que nos reserve cualquier cantidad de bytes. Para hacer esto un creé un tipo de dato byte, que a final de cuentas es un entero de 8 bits sin signo. Y para almacenar la direccion de inicio de nuestro segmento, creé un apuntador de tipo byte, `memoria`.
+{% highlight c %}
+// memoria.h
+typedef uint8_t byte;
+
+//memoria.c
+#include <stdio.h>
+#include "memoria.h"
+
+static byte *memoria = NULL;
+.
+.
+.
+u_int64_t N = 512;
+memoria = malloc(N);
+{% endhighlight %}
+Al ejecutar la última linea del código de arriba, `malloc`, estará reservando N veces el tipo de nuestra variable a la que la asignamos. En este caso el tipo de nuestra variable es byte, asi que estamos reservando 512 bytes. Si fuera de tipo entero de 32 bits nuestro apuntador memoria, estariamos reservando 32 * 512 bits o 2048 bytes.
+
+Como cada dirección en la memoria almacena 1 byte. Podemos decir que cada variable de tipo byte que creamos ocupa una sola dirección de la memoria y que cada dirección de la memoria puede contener únicamente una sola variable de tipo byte. Sabiendo esto podemos decir que si la dirección a la que nuestro apuntador `memoria` apunta es la 0, nuestro segmento de memoria termina en la direccion 512. Volviendo al ejemplo de reservar enteros de 32 bits, si la primera dirección es 0 y reservamos 512 enteros de 32 bits, la última dirección del arreglo es 2047.
+Si lo escribimos en C, usando las variables que definimos en el anterior bloque, queda esto:
+
+{% highlight c %}
+u_int64_t inicio = (u_int64_t)memoria;
+u_int64_t fin = (u_int64_t)&memoria[N-1];
+
+printf("Direccion inicio: %llu\n", inicio);
+printf("Direccion fin: %llu\n", fin);
+
+// Direccion inicio: 106996225278080
+// Direccion fin: 106996225278591
+{% endhighlight %}
+
+Entonces si quisieramos crear un apuntador a la mitad de nuestro segmento de memoria, lo podriamos hacer asi:
+
+{% highlight c %}
+byte * mitad_memoria = memoria + N/2;
+{% endhighlight %}
+
+Siempre cuidando que los apuntadores que usemos sean tipo byte, para que cada unidad que incrementemos, solo avance una dirección de la memoria.
+
+Y si hacemos lo siguiente, podemos forzar a escribir nuestra Cabecera en los 24 bytes que más nos acomoden, en este caso a la mitad del segmento de memoria:
+
+{% highlight c %}
+byte * mitad_memoria = memoria + N/2;
+
+Cabecera *bloque_nuevo = (Cabecera*)mitad_memoria;
+bloque_nuevo->siguiente = NULL;
+bloque_nuevo->id = 0;
+bloque_nuevo->tamano = N/2;
+
+{% endhighlight %}
+
+## Particiones y uniones
+Este es esquema de memoria apareció por primera vez en el artículo _A fast storage allocator_, por Kenneth C. Knowlton, publicado en 1965.
+
+En nuestra implementación, debemos de aplicar divisiones cuando reservamos espacio y uniones cuando liberamos espacio ocupado, para siempre tener el menor número posible de particiones. Para que todo esto funcione, siempre tenemos que mantener un apuntador al inicio de nuestra memoria: `static byte *memoria;`.
+Para reservar espacio, primero hay que encontrar memoria libre suficientemente grande, iterando por la lista, hasta encontrar un espacio con id 0. Al encontrar algo, es necesario ver si podemos dividirla entre dos, o si la dejamos del tamaño que está.
+
+Encontrar espacio vacio con un tamaño de al menos `(n + TAMANO_CABECERA)`:
+{% highlight c %}
+Cabecera * indice_memoria = (Cabecera*)memoria;
+while (indice_memoria != NULL){
+    if (indice_memoria->id == 0){
+
+        if (indice_memoria->tamano >= (n + TAMANO_CABECERA)){
+            break;
+        }
+    }
+    indice_memoria = indice_memoria->siguiente;
+}
+{% endhighlight %}
+
+Partir cuantas veces podamos la memoria para minimizar desperdicio:
+{% highlight c %}
+if (indice_memoria != NULL){
+    while (indice_memoria->tamano / 2 >= (n + TAMANO_CABECERA)){
+        indice_memoria->tamano = indice_memoria->tamano / 2;
+        byte * ptr = (byte*)indice_memoria + indice_memoria->tamano;
+
+        Cabecera *bloque_nuevo = (Cabecera*)ptr;
+        bloque_nuevo->siguiente = indice_memoria->siguiente;
+        bloque_nuevo->id = 0;
+        bloque_nuevo->tamano = indice_memoria->tamano;
+        indice_memoria->siguiente = bloque_nuevo;
+    }
+    // id programa ficticio
+    indice_memoria->id = 0x12345678;
+}
+{% endhighlight %}
+
+El proceso para liberar memoria es más simple, tan solo basta con cambiar el id de la cabecera a 0x0:
+{% highlight c %}
+void *objeto_liberar = reservar_memoria(x_bytes)
+Cabecera*bloque_memoria = (Cabecera*)objeto_liberar;
+bloque_memoria->id = 0;
+{% endhighlight %}
+
+Unir los bloques vacios me tomó un poco más pensarla. ¿Cómo podemos saber si un par de bloques consecutivos del mismo tamaño se pueden unir o no?
+La solución fue recursiva. Empezando por el bloque cero, lo tratamos de unir con el consecutivo. Si el bloque consecutivo es más chico, entonces ese siguiente bloque lo tomamos como el bloque cero, y hacemos lo mismo lo tratamos de unir al bloque consecutivo. Si se logran unir, entonces solo hace falta cambiar los apuntadores y seguir con el siguiente bloque.
+
+El resultado es una función recursiva con 3 casos:
+1. El bloque actual llega hasta el final del segmento, entonces termina la funcion.
+2. El bloque consecutivo es del mismo tamaño y se encuentra vacio, entonces juntamos los bloque y volvemos a aplicar la funcion sobre el nuevo bloque.
+3. El siguiente bloque es mas pequeño, entonces hay que aplicar la funcion sobre ese bloque y el siguiente.
+{% highlight c %}
+void unir_espacio(byte *inicio){
+    Cabecera*info = (Cabecera*)inicio;
+    if(inicio + info->tamano >= memoria + tamano_total){
+
+        return;
+    }
+    else if(info->siguiente->tamano == info->tamano && info->siguiente->id == 0){
+        info->tamano = info->tamano * 2;
+        info->siguiente = info->siguiente->siguiente;
+
+        unir_espacio(inicio);
+    }
+    else {
+        byte * siguiente = inicio + info->tamano;
+        unir_espacio(siguiente);
+    }
+}
+{% endhighlight %}
+
+## Código fuente
+Todo lo anterior en un programa. Para compilar:
+{% highlight sh %}
+gcc -Wall -Werror -fsanitize=address memoria.c -o memoria
+{% endhighlight %}
+
+Para ejecutar:
+{% highlight sh %}
+./memoria
+{% endhighlight %}
+
+Todo el código esta pensado para una computadora de 64 bits, en un sistema de 32 bit puede tener un comportamiento extraño, debido a la diferencia de tamaño de los apuntadores.
+
+Ejemplo de ejecución reservando 8 bytes, 100 bytes, 200 bytes y 32 bytes, en un espacio de 1KB:
+{% highlight sh %}
+      NULL
+       |
+------------------
+ID: 0x12345678
+Tamaño: 32
+Direccion inicio: 0x619000000080
+Direccion fin: 0x61900000009f
+------------------
+       |
+------------------
+ID: 0x0
+Tamaño: 32
+Direccion inicio: 0x6190000000a0
+Direccion fin: 0x6190000000bf
+------------------
+       |
+------------------
+ID: 0x12345678
+Tamaño: 64
+Direccion inicio: 0x6190000000c0
+Direccion fin: 0x6190000000ff
+------------------
+       |
+------------------
+ID: 0x12345678
+Tamaño: 128
+Direccion inicio: 0x619000000100
+Direccion fin: 0x61900000017f
+------------------
+       |
+------------------
+ID: 0x12345678
+Tamaño: 256
+Direccion inicio: 0x619000000180
+Direccion fin: 0x61900000027f
+------------------
+       |
+------------------
+ID: 0x0
+Tamaño: 512
+Direccion inicio: 0x619000000280
+Direccion fin: 0x61900000047f
+------------------
+       |
+      NULL
+{% endhighlight %}
+
+[memoria.h](/notas/assets/memoria.h)
+
+[memoria.c](/notas/assets/memoria.c)
