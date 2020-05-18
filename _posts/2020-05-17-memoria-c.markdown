@@ -194,6 +194,7 @@ void unir_espacio(byte *inicio){
 [memoria.h](/notas/assets/memoria.h)
 
 [memoria.c](/notas/assets/memoria.c)
+
 Todo lo anterior en un programa. Para compilar:
 {% highlight sh %}
 gcc -Wall -Werror -fsanitize=address memoria.c -o memoria
