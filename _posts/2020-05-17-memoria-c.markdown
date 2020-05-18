@@ -1,0 +1,59 @@
+---
+layout: post
+title:  "Administrar memoria en C"
+date:   2020-05-17 20:25:35 -0500
+categories: notas
+---
+
+Esta semana se me ocurrio volver a hacer una tarea de la universidad que me gusta mucho. Crear un programa en el que se pueda subadministrar un pedazo de memoria, mediante operaciones de fragmentación y defragmentación.
+
+Este pograma debe ser capaz de manejar lo siguiente:
+- Iniciar (N): pedir al sistema operativo un pedazo de memoria de tamaño N bytes, donde N es potencia de 2.
+- Reservar espacio (X): subreservar un espacio dentro de nuestra memoria, de tamaño X \| X <= N
+- Liberar espacio (objeto): liberar espacio donde está el objeto.
+- Terminar: Liberar todo el espacio, para poder ejecutar desde el inicio una vez mas.
+
+Sabiendo esto podemos empezar con algunas definiciones:
+
+{% highlight c %}
+// memoria.h
+#include <stdlib.h>
+
+void iniciar(u_int64_t tamano);
+void *reservar_memoria(u_int64_t n);
+void liberar_memoria(void *objeto);
+void finalizar(void);
+
+{% endhighlight %}
+
+Es importante minimizar el desperdicio, no queremos 512 bytes para guardar un número entero. Por eso es necesario hacer divisiones en la memoria. Teniendo esto en cuenta podemos plantear un diseño, en el que la memoria se divida entre 2, hasta encontrar el tamaño que mas cercano al solicitado. Si tenemos una memoria de 512 bytes, y queremos solamente usar 256, podemos partir en 2 nuestra memoria, usar 256 y dejar 256 bytes libres. Si quisieramos guardar 100 bytes, tendriamos algo de desperdicio, pero la idea es la misma, dividimos en dos la memoria, 256 y 256. Tomamos la primer mitad y la volvemos a partir en dos, teniendo 128, 128 y 256, de los cuales nos quedan libres un pedazo de 128 y uno de 256.
+Tambien, al liberar pedazos mas pequeños, la memoria debe de juntarse en las mitades de las que proviene, asi al liberar toda la memoria, tenemos nuevamente un solo pedazo con todo el espacio disponible.
+
+Si ponemos esas ideas en un diagrama seria algo asi:
+![Diagrama de Memoria](/notas/assets/diagrama-memoria.png)
+
+Lo siguiente a definir es cómo le vamos a hacer para saber donde empieza un pedazo y termina otro, cual esta reservado y cual disponible. Para lograr esto probablemente hay miles de caminos diferentes, sin embargo, cuando hice esta tarea por primera vez, el tema central eran las listas ligadas.
+
+Creamos una lista ligada con la información que necesitamos en cada nodo: identificador del programa al que pertenece, tamaño del segmento de memoria y los apuntadores a los pedazos de memoria que estan antes y despues.
+
+{% highlight c %}
+// memoria.h
+
+typedef struct _header Cabecera;
+typedef struct _header{
+    u_int64_t id;
+    u_int64_t tamano;
+    Cabecera *siguiente;
+    Cabecera *anterior;
+}header;
+
+{% endhighlight %}
+
+Con esta lista, nosotros podemos conectar cada uno de los segmentos de memoria, solamente es necesario que en los primeros bytes de cada segmento escribamos el nodo de nuestra lista (Cabecera) y que siempre mantegamos los segmentos conectados correctamente con los apuntadores. Para el proposito de este ejercicio, los pedazos libres los represento con el id 0x0 y los ocupados, con id de una aplicación ficticia, cualquier número diferente que 0x0.
+![Diagrama de Memoria](/notas/assets/diagrama-memoria-2.png)
+
+Con estas últimas ideas, lo único que falta es rellenar las funciones, cuidando un detalle más, el espacio que ocupa la cabecera. Si solicitamos 64 bytes, debemos reservar al menos esos 64 bytes más el tamaño de la cabecera, por lo tanto, sabiendo que nuestra cabecera mide 32 bytes, al solicitar 64 bytes, realmente se solicitan 64 + 32, resultando en un espacio de 128 al seguir el método de fragmentación que decidimos usar.
+El tamaño de la cabecera lo podemos obtener de esta forma:
+{% highlight c %}
+u_int64_t TAMANO_CABECERA = 2 * sizeof(u_int64_t) + 2 * sizeof(Cabecera*);
+{% endhighlight %}
