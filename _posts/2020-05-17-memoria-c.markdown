@@ -191,6 +191,9 @@ void unir_espacio(byte *inicio){
 {% endhighlight %}
 
 ## Código fuente
+[memoria.h](/notas/assets/memoria.h)
+
+[memoria.c](/notas/assets/memoria.c)
 Todo lo anterior en un programa. Para compilar:
 {% highlight sh %}
 gcc -Wall -Werror -fsanitize=address memoria.c -o memoria
@@ -251,7 +254,3 @@ Direccion fin: 0x61900000047f
        |
       NULL
 {% endhighlight %}
-
-[memoria.h](/notas/assets/memoria.h)
-
-[memoria.c](/notas/assets/memoria.c)
