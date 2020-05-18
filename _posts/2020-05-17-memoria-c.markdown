@@ -6,9 +6,9 @@ author:   "Alejandro Alvarez"
 categories: notas
 ---
 
-Esta semana se me ocurrio volver a hacer una tarea de la universidad que me gusta mucho. Crear un programa en el que se pueda subadministrar un pedazo de memoria.
+Esta semana se me ocurrió volver a hacer una tarea de la universidad que me gusta mucho. Crear un programa en el que se pueda subadministrar un pedazo de memoria.
 
-Este pograma debe ser capaz de manejar lo siguiente:
+Este programa debe ser capaz de manejar lo siguiente:
 - Iniciar (N): pedir al sistema operativo un pedazo de memoria de tamaño N bytes, donde N es potencia de 2.
 - Reservar espacio (X): subreservar un espacio dentro de nuestra memoria, de tamaño X \| X <= N
 - Liberar espacio (objeto): liberar espacio donde está el objeto.
@@ -66,7 +66,7 @@ gcc -Wall -Werror -fsanitize=address memoria.c -o memoria
 {% endhighlight %}
 
 ## Aritmética de apuntadores
-Al incializar nuestro programa, pediremos al sistema que nos reserve cualquier cantidad de bytes. Para hacer esto un creé un tipo de dato byte, que a final de cuentas es un entero de 8 bits sin signo. Y para almacenar la direccion de inicio de nuestro segmento, creé un apuntador de tipo byte, `memoria`.
+Al incializar nuestro programa, pediremos al sistema que nos reserve cualquier cantidad de bytes. Para hacer esto creé un tipo de dato byte, que a final de cuentas es un entero de 8 bits sin signo. Y para almacenar la direccion de inicio de nuestro segmento, creé un apuntador de tipo byte, `memoria`.
 {% highlight c %}
 // memoria.h
 typedef uint8_t byte;
