@@ -27,11 +27,11 @@ void finalizar(void);
 
 {% endhighlight %}
 
-Es importante minimizar el desperdicio, no queremos 512 bytes para guardar un número entero. Por eso es necesario hacer divisiones en la memoria. Teniendo esto en cuenta podemos plantear un diseño, en el que la memoria se divida entre 2, hasta encontrar el tamaño que más cercano al solicitado. Si tenemos una memoria de 512 bytes, y queremos solamente usar 256, podemos partir en 2 nuestra memoria, usar 256 y dejar 256 bytes libres. Si quisiéramos guardar 100 bytes, tendríamos algo de desperdicio, pero la idea es la misma, dividimos en dos la memoria, 256 y 256. Tomamos la primer mitad y la volvemos a partir en dos, teniendo 128, 128 y 256, de los cuales nos quedan libres un pedazo de 128 y uno de 256.
+Es importante minimizar el desperdicio, no queremos 512 bytes para guardar un número entero. Por eso es necesario hacer divisiones en la memoria. Teniendo esto en cuenta podemos plantear un diseño, en el que la memoria se divida entre 2, hasta encontrar el tamaño más cercano al solicitado. Si tenemos una memoria de 512 bytes, y queremos solamente usar 256, podemos partir en 2 nuestra memoria, usar 256 y dejar 256 bytes libres. Si quisiéramos guardar 100 bytes, tendríamos algo de desperdicio, pero la idea es la misma, dividimos en dos la memoria, 256 y 256. Tomamos la primer mitad y la volvemos a partir en dos, teniendo 128, 128 y 256, de los cuales nos quedan libres un pedazo de 128 y uno de 256.
 También, al liberar pedazos más pequeños, la memoria debe de juntarse en las mitades de las que proviene, así al liberar toda la memoria, tenemos nuevamente un solo pedazo con todo el espacio disponible.
 
 Si ponemos esas ideas en un diagrama seria algo así:
-![Diagrama de Memoria](/notas/assets/diagrama-memoria.png)
+![Diagrama de Memoria](/notas/assets/memoria-c/diagrama-memoria.png)
 
 Lo siguiente a definir es cómo le vamos a hacer para saber donde empieza un pedazo y termina otro, cuál esta reservado y cuál disponible. Para lograr esto probablemente hay miles de caminos diferentes, sin embargo, cuando hice esta tarea por primera vez, el tema central eran las listas ligadas.
 
@@ -49,8 +49,8 @@ typedef struct _header{
 
 {% endhighlight %}
 
-Con esta lista, nosotros podemos conectar cada uno de los segmentos de memoria, solamente es necesario que en los primeros bytes de cada segmento escribamos el nodo de nuestra lista (Cabecera) y que siempre mantengamos los segmentos conectados correctamente con los apuntadores. Para el propósito de este ejercicio, los pedazos libres los represento con el `id` 0x0 y los ocupados, con `id de una aplicación ficticia, cualquier número diferente que 0x0.
-![Diagrama de Memoria](/notas/assets/diagrama-memoria-2.png)
+Con esta lista, nosotros podemos conectar cada uno de los segmentos de memoria, solamente es necesario que en los primeros bytes de cada segmento escribamos el nodo de nuestra lista (Cabecera) y que siempre mantengamos los segmentos conectados correctamente con los apuntadores. Para el propósito de este ejercicio, los pedazos libres los represento con el `id` 0x0 y los ocupados, con `id` de una aplicación ficticia, cualquier número diferente que 0x0.
+![Diagrama de Memoria](/notas/assets/memoria-c/diagrama-memoria-2.png)
 
 Con estas últimas ideas, lo único que falta es rellenar las funciones, cuidando un detalle más, el espacio que ocupa la cabecera. Si solicitamos 64 bytes, debemos reservar al menos esos 64 bytes más el tamaño de la cabecera, por lo tanto, sabiendo que nuestra cabecera mide 24 bytes, al solicitar 64 bytes, realmente se solicitan 64 + 24, resultando en un espacio de 128 al seguir el método de fragmentación que decidimos usar.
 El tamaño de la cabecera lo podemos obtener de esta forma:
@@ -191,9 +191,9 @@ void unir_espacio(byte *inicio){
 {% endhighlight %}
 
 ## Código fuente
-[memoria.h](/notas/assets/memoria.h)
+[memoria.h](/notas/assets/memoria-c/memoria.h)
 
-[memoria.c](/notas/assets/memoria.c)
+[memoria.c](/notas/assets/memoria-c/memoria.c)
 
 Todo lo anterior en un programa. Para compilar:
 {% highlight sh %}
