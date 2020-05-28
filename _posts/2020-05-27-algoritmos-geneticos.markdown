@@ -8,12 +8,12 @@ categories: tesis
 
 Los algoritmos genéticos son una meta-heuristica de búsqueda inspirada en la selección natural.
 
-A partir de una conjunto de soluciones a un problema, el algoritmo selecciona las mejores soluciones y las combina, para así, ir mejorando continuamente es conjunto, hasta encontrar una que tenga las características que buscamos.
+A partir de una conjunto de soluciones a un problema, el algoritmo selecciona las mejores soluciones y las combina, para así, ir mejorando continuamente ese conjunto, hasta encontrar una solución que tenga las características que buscamos.
 
 
 ## Representación de la solución
 
-Una de las principales características de este algoritmo es la manera en la que se representa la solución a un problema. En la versión original del algoritmo, se propone, que se represente la solución como una cadena de bits, sin embargo, realmente puede ser una cadena de cualquier tipo de dato (números enteros, números reales, letras). Esta cadena siempre debe de ser del mismo tamaño y cada posición define una caracteristica o un comportamiento. Por ejemplo:
+Una de las principales características de este algoritmo es la manera en la que se representa la solución a un problema. En la versión original del algoritmo, se propone, que se represente la solución como una cadena de bits, sin embargo, realmente puede ser una cadena de cualquier tipo de dato (números enteros, números reales, letras). Esta cadena siempre debe de ser del mismo tamaño en todas las soluciones del conjunto y cada posición define una caracteristica o un comportamiento. Por ejemplo:
 
 _Individuo A:_
 
@@ -55,6 +55,8 @@ Para iniciar necesitamos definir los siguientes parámetros:
 - $$ f(x) $$: Una función de aptitud.
 - Un objetivo: _minimizar_ o _maximizar_.
 - Un __criterio de fin de búsqueda__.
+- Probabilidad de mutación $$p_m$$
+- Probabilidad de recombinación $$p_r$$
 
 El algoritmo funciona de la siguiente manera:
 
@@ -63,8 +65,8 @@ El algoritmo funciona de la siguiente manera:
 1.2. Se evalua la calidad de cada solución con la función de aptitud.<br>
 2. Búsqueda:<br>
 2.1. Se seleccionan 2 individuos de nuestra población ($$ x_i,x_j \in \mathbb{P}$$)<br>
-2.2. Se aplica el operador de cruza a los dos individuos, generando ($$\hat{x_i},\hat{x_j}$$)<br>
-2.3. Se aplica el operador de mutación sobre $$\hat{x_i}$$ y $$\hat{x_j}$$<br>
+2.2. Se aplica el operador de cruza a los dos individuos con probabilidad $$p_r$$, generando ($$\hat{x_i},\hat{x_j}$$)<br>
+2.3. Se aplica el operador de mutación sobre $$\hat{x_i}$$ y $$\hat{x_j}$$ con probabilidad $$p_m$$<br>
 2.4. Evaluar aptitud $$f(\hat{x_i})$$ y $$f(\hat{x_j})$$<br>
 2.5. Agregar $$\hat{x_i}$$ y $$\hat{x_j}$$ a conjunto de soluciones nuevas $$\hat{\mathbb{P}}$$<br>
 2.6. Repetir pasos desde 2.1 hasta 2.6 hasta que $$ \mid \hat{\mathbb{P}} \mid = \mid \mathbb{P} \mid $$<br>
@@ -79,7 +81,8 @@ Existen muchas formas para seleccionar los dos individuos que vamos a cruzar (pa
 - Selección por torneo
 - Selección por rango
 
-### Ruleta
+__Ruleta__
+
 En este método de selección, la probabilidad de un individuo de ser seleccionado es proporcional a su aptitud respecto a la población actual. Por lo tanto una solución $$x$$ con aptitud $$f_x$$, tiene una probabilidad de ser seleccionada
 
 $$
@@ -108,7 +111,8 @@ $$
 p_{4} = \frac{1}{3+4+8+1} = 0.06
 $$
 
-### Rango
+__Rango__
+
 Es parecido a la selección por ruleta, pero la probabilidad de un individuo de ser seleccionado es de acuerdo a su posición en la población cuando es ordenada por aptitud. Si una solución $$x$$ tiene posición $$r_x$$ en la población de tamaño $$n$$, la probabilidad de ser seleccionada es de:
 
 $$
@@ -134,7 +138,7 @@ p_{4} = \frac{4 - 4 + 1}{1 + 2 + 3 + 4} = 0.1
 $$
 
 
-### Torneo
+__Torneo__
 
 El método de selección por torneo es un poco más complicado que los otros dos. Consiste en escoger $$k$$ individuos de la población y de esos $$k$$ individuos, seleccionar al más apto. Al reducir el tamaño del torneo ($$k$$) podemos darle más posibilidad a individuos menos aptos de reproducirse. En el torneo se pueden manipular las probabilidades con las que un individuo gana el torneo. Esas probabilidades se pueden calcular con la ruleta o la selección por rango. Normalmente todos los individuos tienen la misma probabilidad de entrar al torneo y el individuo más apto es el que gana el torneo.
 
@@ -146,15 +150,16 @@ El método de selección por torneo es un poco más complicado que los otros dos
 .
 
 
-## Cruza
+## Recombinación
 
-Una vez seleccionados dos individuos de la población estos dos los combinamos para crear dos nuevas soluciones. La idea es que si la primera y la segunda solución son de buena calidad, los resultados de la cruza deben de ser de buena calidad. Existen muchos métodos para cruzar soluciones, el método que seleccionemos depende principalmente de la estructura de las soluciones. Hay problemas donde es necesario que ningun elemento de las soluciones este repetido, o soluciones donde no se pueden realizar operaciones aritméticas los elementos. La *cruza de un solo punto* y la *cruza de k puntos*, funcionan para soluciones binarias y también númericas.
+Una vez seleccionados dos individuos de la población estos dos los combinamos para crear dos nuevas soluciones. La idea es que si la primera y la segunda solución son de buena calidad, los resultados de la recombinación deben de ser de buena calidad. Existen muchos métodos para combinar soluciones, el método que seleccionemos depende principalmente de la estructura de las soluciones. Hay problemas donde es necesario que ningun elemento de las soluciones este repetido, o soluciones donde no se pueden realizar operaciones aritméticas los elementos. La *recombinación de un solo punto* y la *recombinación de k puntos*, funcionan para soluciones binarias y también númericas.
 
-La *cruza de orden 1* sirve para problemas donde las soluciones siempre contienen exactamente los mismos elementos y simplemente se altera el orden de los elementos.
+La *recombinación de orden 1* sirve para problemas donde las soluciones siempre contienen exactamente los mismos elementos y simplemente se altera el orden de los elementos.
 
-Existen muchos más operadores de cruza, estos son solo algunos muy usados.
+Existen muchos más operadores de recombinación, estos son solo algunos muy usados.
 
-### Cruza de un solo punto
+__Recombinación de un solo punto__
+
 Si tenemos dos soluciones A y B, de tamaño $$N$$:
 1. Se selecciona un número aleatorio $$k \mid 0 < k < N $$
 2. Los elementos del 0 al $$k$$ del padre A se copian al hijo A.
@@ -164,23 +169,61 @@ Si tenemos dos soluciones A y B, de tamaño $$N$$:
 
 <img src="/notas/assets/algoritmo-genetico/singlepoint.png" alt="cruza" width="75%"/>
 
-### Cruza de k puntos
-Si tenemos dos soluciones A y B, de tamaño $$N$$:
-1. Se seleccionan $$k$$ números $$ C = \{c \mid 0 \le c < N\}$$
-2. Para cada número $$ c \in C $$
-3. Los elementos del $$k$$ al $$N$$ del padre B se copian al hijo A.
-4. Los elementos del 0 al $$k$$ del padre B se copian al hijo B.
-5. Los elementos del $$k$$ al $$N$$ del padre A se copian al hijo B.
+__Recombinación de k puntos__
+
+Es una generalización de la recombinación de un solo punto, pero seleccionando cualquier número de puntos. Cada solución padre es dividida por esos puntos en segmentos. Los segmentos se compian alternadamente a cada uno de los hijos:
+```
+Padre A:
+Segmento 0 -> Hijo 1
+Segmento 1 -> Hijo 2
+Segmento 2 -> Hijo 1
+.
+.
+.
+Padre B:
+Segmento 0 -> Hijo 2
+Segmento 1 -> Hijo 1
+Segmento 2 -> Hijo 2
+.
+.
+.
+```
+
 
 
 <img src="/notas/assets/algoritmo-genetico/multipunto.png" alt="cruza" width="72%"/>
 
-### Cruza orden 1
+__Recombinación orden 1__
+
+La recombinación de orden 1 funciona solamente con cuando:
+- El problema requiere un ordenamiento de los elementos. Es decir, todas las soluciones tienen los mismos elementos exactamente, pero en diferente orden.
+- No hay elementos repetidos.
+
+1. Se selecciona aleatoriamente un un cojunto de elementos consecutivos en el Padre 1 y se copian al hijo 1.
+2. Para cada elemento en el Padre 2 que no esta en el hijo 1, se copia al primer espacio vacio en el hijo 1.
+3. Se repite el procedimiento para el hijo 2.
+
+<img src="/notas/assets/algoritmo-genetico/orden1.png" alt="cruza" width="72%"/>
+
 
 ## Mutación
+Las mutaciones son operadores que se aplican sobre una solución, para producir una solución similar pero con pequeñas alteraciones. Sirven para mantener diversidad dentro de la población y provocar soluciones más aptas.
+Al igual que las recombinaciones, hay muchos tipos de mutationes y dependen del tipo de solución que tengamos. Algunas mutaciones son:
 
+__Intercambio__
 
+Se seleccionan dos elementos aleatoriamente de una solución y se intercambian.
+
+__Mutación de un solo punto__
+
+Se selecciona un elemento aleatoriamente en la solución y se cambia su valor por un número generado aleatoriamente.
+
+__Bit flip__
+
+En una solución binaria, se selecciona un elemento aleatoriamente en la solución y se cambia su valor (de 0 a 1, de 1 a 0).
 
 ## Variantes
 
-## Aplicaciones
+__Elitismo__
+
+Se dice que un algoritmo genético es elitista cuando al remplazar la población entre una generación y otra (paso 2.7), conservas la o las soluciones más aptas. De esta forma es imposible que se pierda calidad entre una generación y otra.
