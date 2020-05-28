@@ -10,6 +10,40 @@ Los algoritmos genéticos son una meta-heuristica de búsqueda inspirada en la s
 
 A partir de una conjunto de soluciones a un problema, el algoritmo selecciona las mejores soluciones y las combina, para así, ir mejorando continuamente ese conjunto, hasta encontrar una solución que tenga las características que buscamos.
 
+## Algoritmo
+
+Para iniciar necesitamos definir los siguientes parámetros:
+
+- $$ n $$: Tamaño del conjunto de soluciones (tamaño de la población).
+- $$ f(x) $$: Una función de aptitud.
+- Un objetivo: _minimizar_ o _maximizar_.
+- Un __criterio de fin de búsqueda__.
+- Probabilidad de mutación $$p_m$$
+- Probabilidad de recombinación $$p_r$$
+
+Además se necesitan crear algunas funciones:
+- Operador de mutación
+- Operador de recombinación
+- Inicialización de la población
+- Operador de selección
+
+Cada uno de esos elementos serán discutidos en las siguientes secciones con más detalle.
+
+El algoritmo funciona de la siguiente manera:
+
+1. Inicialización:<br>
+1.1. Se crea una población  $$\mathbb{P}:\{ x_1 ... x_n\} $$<br>
+1.2. Se evalua la calidad de cada solución con la función de aptitud.<br>
+2. Búsqueda:<br>
+2.1. Se seleccionan 2 individuos de nuestra población ($$ x_i,x_j \in \mathbb{P}$$)<br>
+2.2. Se aplica el operador de recombinación a los dos individuos con probabilidad $$p_r$$, generando ($$\hat{x_i},\hat{x_j}$$)<br>
+2.3. Se aplica el operador de mutación sobre $$\hat{x_i}$$ y $$\hat{x_j}$$ con probabilidad $$p_m$$<br>
+2.4. Evaluar aptitud $$f(\hat{x_i})$$ y $$f(\hat{x_j})$$<br>
+2.5. Agregar $$\hat{x_i}$$ y $$\hat{x_j}$$ a conjunto de soluciones nuevas $$\hat{\mathbb{P}}$$<br>
+2.6. Repetir pasos desde 2.1 hasta 2.6 hasta que $$ \mid \hat{\mathbb{P}} \mid = \mid \mathbb{P} \mid $$<br>
+2.7. Reemplazar $$\mathbb{P}$$ con $$\hat{\mathbb{P}} $$<br>
+2.8. Repetir _búsqueda_ hasta que se cumpla el __criterio de fin de búsqueda__.
+
 
 ## Representación de la solución
 
@@ -45,33 +79,6 @@ B: [1][0][0][1]
 ```
 
 La aptitud del individuo A $$f(x_A)$$ es 10 y del individuo B $$f(x_B)$$ es 9, como estamos tratando de maximizar $$f(x)$$, A es mejor solución que B.
-
-
-## Algoritmo
-
-Para iniciar necesitamos definir los siguientes parámetros:
-
-- $$ n $$: Tamaño de la población.
-- $$ f(x) $$: Una función de aptitud.
-- Un objetivo: _minimizar_ o _maximizar_.
-- Un __criterio de fin de búsqueda__.
-- Probabilidad de mutación $$p_m$$
-- Probabilidad de recombinación $$p_r$$
-
-El algoritmo funciona de la siguiente manera:
-
-1. Inicialización:<br>
-1.1. Se crea una población  $$\mathbb{P}:\{ x_1 ... x_n\} $$<br>
-1.2. Se evalua la calidad de cada solución con la función de aptitud.<br>
-2. Búsqueda:<br>
-2.1. Se seleccionan 2 individuos de nuestra población ($$ x_i,x_j \in \mathbb{P}$$)<br>
-2.2. Se aplica el operador de cruza a los dos individuos con probabilidad $$p_r$$, generando ($$\hat{x_i},\hat{x_j}$$)<br>
-2.3. Se aplica el operador de mutación sobre $$\hat{x_i}$$ y $$\hat{x_j}$$ con probabilidad $$p_m$$<br>
-2.4. Evaluar aptitud $$f(\hat{x_i})$$ y $$f(\hat{x_j})$$<br>
-2.5. Agregar $$\hat{x_i}$$ y $$\hat{x_j}$$ a conjunto de soluciones nuevas $$\hat{\mathbb{P}}$$<br>
-2.6. Repetir pasos desde 2.1 hasta 2.6 hasta que $$ \mid \hat{\mathbb{P}} \mid = \mid \mathbb{P} \mid $$<br>
-2.7. Reemplazar $$\mathbb{P}$$ con $$\hat{\mathbb{P}} $$<br>
-2.8. Repetir _búsqueda_ hasta que se cumpla el __criterio de fin de búsqueda__.
 
 
 ## Selección
@@ -171,7 +178,7 @@ Si tenemos dos soluciones A y B, de tamaño $$N$$:
 
 __Recombinación de k puntos__
 
-Es una generalización de la recombinación de un solo punto, pero seleccionando cualquier número de puntos. Cada solución padre es dividida por esos puntos en segmentos. Los segmentos se compian alternadamente a cada uno de los hijos:
+Es una generalización de la recombinación de un solo punto, pero seleccionando cualquier número de puntos. Cada solución padre es dividida por esos puntos en segmentos. Los segmentos se copian alternadamente a cada uno de los hijos:
 ```
 Padre A:
 Segmento 0 -> Hijo 1
