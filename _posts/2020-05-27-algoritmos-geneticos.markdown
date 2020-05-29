@@ -3,7 +3,7 @@ layout: post
 title:  "Algoritmos genéticos"
 date:   2020-05-27 11:17:35 -0500
 author:   "Alejandro Alvarez"
-categories: tesis
+categories: cs
 ---
 
 Los algoritmos genéticos son una meta-heurística inspirada en la selección natural, para solucionar problemas de búsqueda, combinatoria o optimización.
