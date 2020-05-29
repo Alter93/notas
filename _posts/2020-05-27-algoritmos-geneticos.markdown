@@ -6,13 +6,20 @@ author:   "Alejandro Alvarez"
 categories: tesis
 ---
 
-Los algoritmos genéticos son una meta-heuristica de búsqueda inspirada en la selección natural.
+Los algoritmos genéticos son una meta-heuristica inspirada en la selección natural, para solucionar problemas de búsqueda o combinatoria.
 
 A partir de una conjunto de soluciones a un problema, el algoritmo selecciona las mejores soluciones y las combina, para así, ir mejorando continuamente ese conjunto, hasta encontrar una solución que tenga las características que buscamos.
 
 ## Algoritmo
 
-Para iniciar necesitamos definir los siguientes parámetros:
+Los algoritmos genéticos necesitan de varias operaciones auxiliares para poder funcionar:
+
+- Operador de mutación: modificar una solución.
+- Operador de recombinación: combinar dos soluciones para producir dos nuevas.
+- Inicialización de la población: producir el conjunto inicial de soluciones sobre el que va a trabajar el algoritmo.
+- Operador de selección: función no-determinística para seleccionar soluciones de acuerdo a que tan aptas son.
+
+Además para iniciar necesitamos definir los siguientes parámetros:
 
 - $$ n $$: Tamaño del conjunto de soluciones (tamaño de la población).
 - $$ f(x) $$: Una función de aptitud.
@@ -21,18 +28,12 @@ Para iniciar necesitamos definir los siguientes parámetros:
 - Probabilidad de mutación $$p_m$$
 - Probabilidad de recombinación $$p_r$$
 
-Además se necesitan crear algunas funciones:
-- Operador de mutación
-- Operador de recombinación
-- Inicialización de la población
-- Operador de selección
-
 Cada uno de esos elementos serán discutidos en las siguientes secciones con más detalle.
 
 El algoritmo funciona de la siguiente manera:
 
 1. Inicialización:<br>
-1.1. Se crea una población  $$\mathbb{P}:\{ x_1 ... x_n\} $$<br>
+1.1. Se crea una población inicial  $$\mathbb{P}:\{ x_1 ... x_n\} $$<br>
 1.2. Se evalua la calidad de cada solución con la función de aptitud.<br>
 2. Búsqueda:<br>
 2.1. Se seleccionan 2 individuos de nuestra población ($$ x_i,x_j \in \mathbb{P}$$)<br>
@@ -79,6 +80,8 @@ B: [1][0][0][1]
 ```
 
 La aptitud del individuo A $$f(x_A)$$ es 10 y del individuo B $$f(x_B)$$ es 9, como estamos tratando de maximizar $$f(x)$$, A es mejor solución que B.
+
+Este ejemplo no es una aplicación práctica ni tampoco real de un algoritmo genético, encontrar una representación binaria es un problema de una sola solución, donde podemos llegar a la solución con exactitud, no es necesario aproximar el valor a través de búsqueda y optimización. Los algoritmos genéticos nos van servir para problemas a los cuales normalmente fallamos en encontrar una solución exacta y el espacio de búsqueda es más grande de lo que podemos abarcar.
 
 
 ## Selección
@@ -234,3 +237,12 @@ En una solución binaria, se selecciona un elemento aleatoriamente en la soluci�
 __Elitismo__
 
 Se dice que un algoritmo genético es elitista cuando al remplazar la población entre una generación y otra (paso 2.7), conservas la o las soluciones más aptas. De esta forma es imposible que se pierda calidad entre una generación y otra.
+
+## Creación de una población inicial
+
+Definir el punto de partida de un algoritmo genético no es tan sencillo, para que funcione el algoritmo, es necesario que la población de soluciones al menos cumpla con estas dos características:
+
+- Admisible: necesitamos generar soluciones que sean adecuadas al problema.
+- Variada: entre más variedad de soluciones tengamos, el espacio de búsqueda es más amplio.
+
+La forma más simple es creando arreglos aleatoriamente con la estructura de solución que definimos y despues verificando que cumplan con las características que buscamos.
