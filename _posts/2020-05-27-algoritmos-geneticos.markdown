@@ -12,9 +12,9 @@ A partir de un conjunto de soluciones a un problema, el algoritmo selecciona las
 
 ## Algoritmo
 
-El algoritmo funciona iterativamente, a lo largo del proceso, se mantiene un conjunto de posibles soluciones al problema, denominado población. Esas soluciones, también llamadas individuos se califican con una función de aptitud, para así saber si una solución es mejor que otra.
+El algoritmo funciona iterativamente, a lo largo del proceso, se mantiene un conjunto de posibles soluciones al problema, denominado población. A la población correspondiente a una iteración se le llama generación. Esas soluciones, también llamadas individuos se califican con una función de aptitud, para así saber si una solución es mejor que otra.
 
-Los algoritmos genéticos necesitan de algunos para poder funcionar:
+Los algoritmos genéticos necesitan de algunos operadores para poder funcionar:
 
 - Operador de mutación: modificar una solución.
 - Operador de recombinación: combinar dos soluciones para producir dos nuevas.
@@ -53,11 +53,11 @@ El algoritmo funciona de la siguiente manera:
 
 Una de las principales características de este algoritmo es la manera en la que se representa la solución a un problema. En la versión original del algoritmo, se propone, que se represente la solución como una cadena de bits, sin embargo, realmente puede ser una cadena de cualquier tipo de dato (números enteros, números reales, letras). Esta cadena siempre debe de ser del mismo tamaño en todas las soluciones del conjunto y cada posición define una característica o un comportamiento. Por ejemplo:
 
-_Individuo A:_
+_Individuo $$x_a$$:_
 
 <img src="/notas/assets/algoritmo-genetico/individuo1.png" alt="Individuo1" width="75%"/>
 
-_Individuo B:_
+_Individuo $$x_b$$:_
 
 <img src="/notas/assets/algoritmo-genetico/individuo2.png" alt="Individuo2" width="75%"/>
 
