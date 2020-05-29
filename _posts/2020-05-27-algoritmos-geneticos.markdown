@@ -208,11 +208,11 @@ Segmento 2 -> Hijo 2
 
 __Recombinación orden 1__
 
-La recombinación de orden 1 funciona solamente con cuando:
-- El problema requiere un ordenamiento de los elementos. Es decir, todas las soluciones tienen los mismos elementos exactamente, pero en diferente orden.
-- No hay elementos repetidos.
+La recombinación de orden 1 funciona solamente en problemas donde se requiere optimizar el orden de una serie de elementos. Un ejemplo clásico es el problema del viajero, donde dado un conjunto de ubicaciones, un viajero debe visitar solamente una vez cada ubicación de ese conjunto y volver a la ubicación inicial, minimizando la distancia total del viaje. En este problema las soluciones son representadas como un conjunto de números o identificadores únicos, donde cada uno de ellos representa una de las ubicaciones a las que el viajero debe de ir. El orden de esos valores, representa el orden en el que el viajero las visitará.
 
-1. Se selecciona aleatoriamente un un conjunto de elementos consecutivos en el Padre 1 y se copian al hijo 1.
+La recombinación de orden 1 funciona de la siguiente forma:
+
+1. Se selecciona aleatoriamente un conjunto de elementos consecutivos en el Padre 1 y se copian al hijo 1.
 2. Para cada elemento en el Padre 2 que no esta en el hijo 1, se copia al primer espacio vacío en el hijo 1.
 3. Se repite el procedimiento para el hijo 2.
 
