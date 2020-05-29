@@ -6,9 +6,9 @@ author:   "Alejandro Alvarez"
 categories: cs
 ---
 
-Los algoritmos genéticos son una meta-heurística inspirada en la selección natural, para solucionar problemas de búsqueda, combinatoria o optimización.
+Los algoritmos genéticos son una meta-heurística inspirada en la selección natural para solucionar problemas de búsqueda, combinatoria o optimización.
 
-A partir de un conjunto de soluciones a un problema, el algoritmo selecciona las mejores soluciones y las combina, para así, ir mejorando continuamente las soluciones de ese conjunto, hasta encontrar una que tenga las características que buscamos.
+A partir de un conjunto de posibles soluciones a un problema, el algoritmo selecciona las mejores soluciones y las combina, para así, ir mejorando continuamente las soluciones de ese conjunto, hasta encontrar una que tenga las características que buscamos.
 
 ## Algoritmo
 
