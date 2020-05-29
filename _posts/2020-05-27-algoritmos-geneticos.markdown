@@ -12,7 +12,7 @@ A partir de un conjunto de soluciones a un problema, el algoritmo selecciona las
 
 ## Algoritmo
 
-El algoritmo funciona iterativamente, a lo largo del proceso, se mantiene un conjunto de posibles soluciones al problema, denominado población. A la población correspondiente a una iteración se le llama generación. Esas soluciones, también llamadas individuos se califican con una función de aptitud, para así saber si una solución es mejor que otra.
+A lo largo del algoritmo se mantiene un conjunto de posibles soluciones al problema, denominado población. Esas soluciones, que también son llamadas individuos, se califican con una función de aptitud, para así saber si una solución es mejor que otra. Los algoritmos genéticos son iterativos y a la población correspondiente a una iteración se le llama generación.
 
 Los algoritmos genéticos necesitan de algunos operadores para poder funcionar:
 
