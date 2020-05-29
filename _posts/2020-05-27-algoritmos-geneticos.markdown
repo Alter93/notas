@@ -6,18 +6,21 @@ author:   "Alejandro Alvarez"
 categories: tesis
 ---
 
-Los algoritmos genéticos son una meta-heuristica inspirada en la selección natural, para solucionar problemas de búsqueda o combinatoria.
+Los algoritmos genéticos son una meta-heurística inspirada en la selección natural, para solucionar problemas de búsqueda, combinatoria o optimización.
 
-A partir de una conjunto de soluciones a un problema, el algoritmo selecciona las mejores soluciones y las combina, para así, ir mejorando continuamente ese conjunto, hasta encontrar una solución que tenga las características que buscamos.
+A partir de un conjunto de soluciones a un problema, el algoritmo selecciona las mejores soluciones y las combina, para así, ir mejorando continuamente ese conjunto, hasta encontrar una solución que tenga las características que buscamos.
 
 ## Algoritmo
 
-Los algoritmos genéticos necesitan de varias operaciones auxiliares para poder funcionar:
+El algoritmo funciona iterativamente, a lo largo del proceso, se mantiene un conjunto de posibles soluciones al problema, denominado población. Esas soluciones, también llamadas individuos se califican con una función de aptitud, para así saber si una solución es mejor que otra.
+
+Los algoritmos genéticos necesitan de algunos para poder funcionar:
 
 - Operador de mutación: modificar una solución.
 - Operador de recombinación: combinar dos soluciones para producir dos nuevas.
-- Inicialización de la población: producir el conjunto inicial de soluciones sobre el que va a trabajar el algoritmo.
+- Inicialización de la población: producir el conjunto inicial de posibles soluciones al problema, sobre el que va a trabajar el algoritmo.
 - Operador de selección: función no-determinística para seleccionar soluciones de acuerdo a que tan aptas son.
+
 
 Además para iniciar necesitamos definir los siguientes parámetros:
 
@@ -34,7 +37,7 @@ El algoritmo funciona de la siguiente manera:
 
 1. Inicialización:<br>
 1.1. Se crea una población inicial  $$\mathbb{P}:\{ x_1 ... x_n\} $$<br>
-1.2. Se evalua la calidad de cada solución con la función de aptitud.<br>
+1.2. Se evalúa la calidad de cada solución $$x_i \in \mathbb{P} con la función de aptitud.<br>
 2. Búsqueda:<br>
 2.1. Se seleccionan 2 individuos de nuestra población ($$ x_i,x_j \in \mathbb{P}$$)<br>
 2.2. Se aplica el operador de recombinación a los dos individuos con probabilidad $$p_r$$, generando ($$\hat{x_i},\hat{x_j}$$)<br>
@@ -48,7 +51,7 @@ El algoritmo funciona de la siguiente manera:
 
 ## Representación de la solución
 
-Una de las principales características de este algoritmo es la manera en la que se representa la solución a un problema. En la versión original del algoritmo, se propone, que se represente la solución como una cadena de bits, sin embargo, realmente puede ser una cadena de cualquier tipo de dato (números enteros, números reales, letras). Esta cadena siempre debe de ser del mismo tamaño en todas las soluciones del conjunto y cada posición define una caracteristica o un comportamiento. Por ejemplo:
+Una de las principales características de este algoritmo es la manera en la que se representa la solución a un problema. En la versión original del algoritmo, se propone, que se represente la solución como una cadena de bits, sin embargo, realmente puede ser una cadena de cualquier tipo de dato (números enteros, números reales, letras). Esta cadena siempre debe de ser del mismo tamaño en todas las soluciones del conjunto y cada posición define una característica o un comportamiento. Por ejemplo:
 
 _Individuo A:_
 
@@ -64,11 +67,11 @@ Esta función es la que va a guiar el algoritmo hacia encontrar mejores solucion
 
 $$ G(x) = \max f(x) $$
 
-ó
+o
 
 $$ G(x) = \min f(x) $$
 
-A esa función $$ f(x) $$ se le conoce como funcion de aptitud. Si quisieramos crear un algoritmo genético para encontrar la representacion binaria del numero 15 en 4 bits, una función de aptitud podria ser:
+A esa función $$ f(x) $$ se le conoce como función de aptitud. Si quisieramos crear un algoritmo genético para encontrar la representación binaria del numero 15 en 4 bits, una función de aptitud podría ser:
 
 $$ f(x) = \sum_{i=1}^{4} x_i \cdot 2^i $$
 
@@ -150,7 +153,7 @@ $$
 
 __Torneo__
 
-El método de selección por torneo es un poco más complicado que los otros dos. Consiste en escoger $$k$$ individuos de la población y de esos $$k$$ individuos, seleccionar al más apto. Al reducir el tamaño del torneo ($$k$$) podemos darle más posibilidad a individuos menos aptos de reproducirse. En el torneo se pueden manipular las probabilidades con las que un individuo gana el torneo. Esas probabilidades se pueden calcular con la ruleta o la selección por rango. Normalmente todos los individuos tienen la misma probabilidad de entrar al torneo y el individuo más apto es el que gana el torneo.
+El método de selección por torneo es un poco más complicado que los otros dos. Consiste en escoger $$k$$ individuos de la población y de esos $$k$$ individuos, seleccionar al más apto. Al reducir el tamaño del torneo ($$k$$) podemos darle más posibilidad a individuos menos aptos. En el torneo se pueden manipular las probabilidades con las que un individuo gana el torneo. Esas probabilidades se pueden calcular con la ruleta o la selección por rango. Normalmente todos los individuos tienen la misma probabilidad de entrar al torneo y el individuo más apto es el que gana el torneo.
 
 1. Seleccionar $$k$$ individuos de la población.
 2. Seleccionar al mejor individuo del torneo usando una probabilidad.
@@ -162,7 +165,7 @@ El método de selección por torneo es un poco más complicado que los otros dos
 
 ## Recombinación
 
-Una vez seleccionados dos individuos de la población estos dos los combinamos para crear dos nuevas soluciones. La idea es que si la primera y la segunda solución son de buena calidad, los resultados de la recombinación deben de ser de buena calidad. Existen muchos métodos para combinar soluciones, el método que seleccionemos depende principalmente de la estructura de las soluciones. Hay problemas donde es necesario que ningun elemento de las soluciones este repetido, o soluciones donde no se pueden realizar operaciones aritméticas los elementos. La *recombinación de un solo punto* y la *recombinación de k puntos*, funcionan para soluciones binarias y también númericas.
+Una vez seleccionados dos individuos de la población estos dos los combinamos para crear dos nuevas soluciones. La idea es que si la primera y la segunda solución son de buena calidad, los resultados de la recombinación deben de ser de buena calidad. Existen muchos métodos para combinar soluciones, el método que seleccionemos depende principalmente de la estructura de las soluciones. Hay problemas donde es necesario que ningún elemento de las soluciones este repetido, o soluciones donde no se pueden realizar operaciones aritméticas los elementos. La *recombinación de un solo punto* y la *recombinación de k puntos*, funcionan para soluciones binarias y también númericas.
 
 La *recombinación de orden 1* sirve para problemas donde las soluciones siempre contienen exactamente los mismos elementos y simplemente se altera el orden de los elementos.
 
@@ -209,8 +212,8 @@ La recombinación de orden 1 funciona solamente con cuando:
 - El problema requiere un ordenamiento de los elementos. Es decir, todas las soluciones tienen los mismos elementos exactamente, pero en diferente orden.
 - No hay elementos repetidos.
 
-1. Se selecciona aleatoriamente un un cojunto de elementos consecutivos en el Padre 1 y se copian al hijo 1.
-2. Para cada elemento en el Padre 2 que no esta en el hijo 1, se copia al primer espacio vacio en el hijo 1.
+1. Se selecciona aleatoriamente un un conjunto de elementos consecutivos en el Padre 1 y se copian al hijo 1.
+2. Para cada elemento en el Padre 2 que no esta en el hijo 1, se copia al primer espacio vacío en el hijo 1.
 3. Se repite el procedimiento para el hijo 2.
 
 <img src="/notas/assets/algoritmo-genetico/orden1.png" alt="cruza" width="72%"/>
@@ -218,7 +221,7 @@ La recombinación de orden 1 funciona solamente con cuando:
 
 ## Mutación
 Las mutaciones son operadores que se aplican sobre una solución, para producir una solución similar pero con pequeñas alteraciones. Sirven para mantener diversidad dentro de la población y provocar soluciones más aptas.
-Al igual que las recombinaciones, hay muchos tipos de mutationes y dependen del tipo de solución que tengamos. Algunas mutaciones son:
+Al igual que las recombinaciones, hay muchos tipos de mutaciones y dependen del tipo de solución que tengamos. Algunas mutaciones son:
 
 __Intercambio__
 
@@ -236,7 +239,7 @@ En una solución binaria, se selecciona un elemento aleatoriamente en la soluci�
 
 __Elitismo__
 
-Se dice que un algoritmo genético es elitista cuando al remplazar la población entre una generación y otra (paso 2.7), conservas la o las soluciones más aptas. De esta forma es imposible que se pierda calidad entre una generación y otra.
+Se dice que un algoritmo genético es elitista cuando al reemplazar la población entre una generación y otra (paso 2.7), conservas la solución o las soluciones más aptas. De esta forma es imposible que se pierda calidad entre una generación y otra.
 
 ## Creación de una población inicial
 
@@ -245,4 +248,4 @@ Definir el punto de partida de un algoritmo genético no es tan sencillo, para q
 - Admisible: necesitamos generar soluciones que sean adecuadas al problema.
 - Variada: entre más variedad de soluciones tengamos, el espacio de búsqueda es más amplio.
 
-La forma más simple es creando arreglos aleatoriamente con la estructura de solución que definimos y despues verificando que cumplan con las características que buscamos.
+La forma más simple es creando arreglos aleatoriamente con la estructura de solución que definimos y después verificando que cumplan con las características que buscamos.
