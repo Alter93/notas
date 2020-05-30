@@ -37,7 +37,7 @@ El algoritmo funciona de la siguiente manera:
 
 1. Inicialización:<br>
 1.1. Se crea una población inicial  $$\mathbb{P}:\{ x_1 ... x_n\} $$<br>
-1.2. Se evalúa la calidad de cada solución $$x_i \in \mathbb{P} con la función de aptitud.<br>
+1.2. Se evalúa la calidad de cada solución $$x_i \in \mathbb{P}$$ con la función de aptitud.<br>
 2. Búsqueda:<br>
 2.1. Se seleccionan 2 individuos de nuestra población ($$ x_i,x_j \in \mathbb{P}$$)<br>
 2.2. Se aplica el operador de recombinación a los dos individuos con probabilidad $$p_r$$, generando ($$\hat{x_i},\hat{x_j}$$)<br>
