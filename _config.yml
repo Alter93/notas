@@ -23,7 +23,7 @@ email: alejandro.a@protonmail.ch
 description: >- # this means to ignore newlines until "baseurl:"
  Notas de desarrollo de software, análisis de datos y más.
 baseurl: "/notas" # the subpath of your site, e.g. /blog
-url: "https://alter93.github.io/" # the base hostname & protocol for your site, e.g. http://example.com
+url: "https://altec.dev" # the base hostname & protocol for your site, e.g. http://example.com
 github_username:  alter93
 
 # Build settings
@@ -33,6 +33,7 @@ plugins:
 
 
 markdown: kramdown
+
 kramdown:
    math_engine: mathjax
 
