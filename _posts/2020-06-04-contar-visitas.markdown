@@ -160,7 +160,7 @@ Y si queremos desplegar el número de visitas y los visitantes en otra página p
 </script>
 {% endhighlight %}
 
-Y para desplegarlo:
+Y para mostrar los valores:
 {% highlight html %}
 <div class="container">
     <h2 id="visitas"></h2>
