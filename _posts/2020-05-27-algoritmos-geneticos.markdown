@@ -73,7 +73,7 @@ $$ G(x) = \min f(x) $$
 
 A esa función $$ f(x) $$ se le conoce como función de aptitud. Si quisieramos crear un algoritmo genético para encontrar la representación binaria del numero 15 en 4 bits, una función de aptitud podría ser:
 
-$$ f(x) = \sum_{i=1}^{4} x_i \cdot 2^i $$
+$$ f(x) = \sum_{i=0}^{4} x_i \cdot 2^i $$
 
 Por lo tanto si tenemos dos individuos:
 
