@@ -152,7 +152,7 @@ def crear_poblacion(n):
 {% endhighlight %}
 
 ## Evaluación de las soluciones
-Esta es probablemente la parte más importante del programa. Saber que combinaciónes son mas probables de ganar un sorteo es lo que va a guiar la búsqueda. Existen muchas teorías acerca de como ganar la lotería de los cuales se derivan diferentes formas para calcular las probabilidades. Yo no soy tan aficionadoa los juegos de azar, pero tuve algunas ideas acerca de que combinaciones pueden ser mas probables de ganar.
+Esta es probablemente la parte más importante del programa. Saber que combinaciónes son más probables de ganar un sorteo es lo que va a guiar la búsqueda. Existen muchas teorías acerca de como ganar la lotería de los cuales se derivan diferentes formas para calcular las probabilidades. Yo no soy tan aficionado a los juegos de azar, pero tuve algunas ideas acerca de que combinaciones pueden ser mas probables de ganar.
 
 1. Los números que se han repetido recientemente, probablemente se vuelvan a repetir.
 2. Hay conjuntos de números que son improbables de salir seleccionados como por ejemplo 1,2,3,4,5,6,7.
@@ -337,6 +337,7 @@ Si calculamos la frecuencia con la que salio cada número en el último año y o
 
  Cabe mencionar, que todos los números de los sorteos estan ordenados de menor a mayor. Por lo que en los pares, el primer número (eje X) siempre será el menor de ambos, por lo que en la matriz, el triangulo inferior está vacio.
 
+ Por último faltaría calcular las probabilidades de las estrellas. Esa parte decidi dejarla fuera de nuestra función objetivo, eso hará que los números de las estrellas sean al azar totalmente. Escoger esos dos digitos de acuerdo a las frecuencias va a hacer que siempre salgan las mismas dos estrellas y es algo que no quiero que suceda en este programa.
 
 ## Operadores genéticos
 Para garantizar que nuestro algoritmo funcione correctamente es necesario elegir operadores que generen soluciones válidas para nuestro problema.
@@ -391,6 +392,7 @@ def cruzar(padre_1, padre_2):
     return hijo_1, hijo_2
 
 {% endhighlight %}
+
 
 ### Mutación
 Para añadir un poco de diversidad a nuestros números de EuroMillones es necesario usar la mutación. Para este fin, vamos a cambiar aleatoriamente dos números en las soluciones, una vez más respetando las condiciones para que sigan siendo válidas.
@@ -473,6 +475,8 @@ Mejor combinación: [21, 17, 4, 23, 27, 4, 10]
 {%endhighlight%}
 
 Es importante recalcar que la finalidad este programa es explicar como resolver problemas con un algoritmo genético. Es imposible predecir el futuro y la lotería es un juego de azar, por lo tanto no existe un método que nos haga ganar. Y aun que esta idea tenga ciertos fundamentos teóricos, los números que genera el programa tiene exactamente la misma probabilidad de ganar que si compramos un boleto con los números `[1,2,3,4,5,6,7]` (o cualquier otra combinación).
+
+Además, los cálculos hechos no reflejan un probabilidad real de ganar la lotería y simplemente creamos una métrica para encontrar combinaciones de números que _se lleven bien juntos_.
 
 ## Código
 El código fuente lo pueden descargar de github: [Algoritmo EuroMillones](https://github.com/Alter93/genetic_euromillions)
