@@ -5,10 +5,11 @@ date:   2020-12-13 19:25:38 -0500
 author:   "Alejandro Alvarez"
 categories: notas
 ---
+{:refdef: style="text-align: center;" }
+![My Image](/notas/assets/euromillones/euromillones.png){:width="100%"}
+{: refdef}
 
 En un [artículo anterior hablé del algoritmo genético]({% post_url 2020-05-27-algoritmos-geneticos %}) y en esta ocasión vamos a resolver un problema usando ese algoritmo. El problema que elegí es como generar una combinación de números que sea _más probable_ de ganar EuroMillones.
-
-<img src="/notas/assets/euromillones/algoritmo_genetico.png" alt="Individuo1" width="88%"/>
 
 EuroMillones es una lotería que se juega en varios paises de Europa. El primer sorteo fue en el 2004 y cada semana hay 2 sorteos. Durante el sorteo se extraen 5 bolas de una máquina con 50 bolas númeradas seguido de 2 bolas que se extraen de otra máquina con 12 bolas numeradas. Por lo tanto, se juega con cinco números del 1 al 50 y dos números del 1 al 12 (estrellas de la suerte).
 
@@ -17,6 +18,8 @@ El objetivo de nuestro programa es encontrar una combianción de números que se
 1. Una forma de representar las posibles soluciones del problema. En este caso la representación esta dada por el problema: un arreglo de 7 números, los primeros cinco deben de estar entre 1 y 50 y no repetirse entre ellos, los últimos dos son números distintos entre el 1 y el 12.
 2. Un función para evaluar nuestras soluciones. Sabiendo los datos historicos, ¿qué tan probable es que este grupo de números salga en el siguiente sorteo?
 3. Operadores genéticos que vayamos a utilizar.
+
+<img src="/notas/assets/euromillones/algoritmo_genetico.png" alt="Individuo1" width="88%"/>
 
 El programa lo escribiré en python tratando siempre hacerlo lo más simple posible. Empezamos por escribir el algoritmo genético de una forma semi-abstracta:
 
