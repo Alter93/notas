@@ -5,11 +5,11 @@ date:   2020-12-13 19:25:38 -0500
 author:   "Alejandro Alvarez"
 categories: notas
 ---
+En un [artículo anterior hablé del algoritmo genético]({% post_url 2020-05-27-algoritmos-geneticos %}) y en esta ocasión vamos a resolver un problema usando ese algoritmo. El problema que elegí es como generar una combinación de números que sea _más probable_ de ganar EuroMillones.
+
 {:refdef: style="text-align: center;" }
 ![My Image](/notas/assets/euromillones/euromillones.png){:width="100%"}
 {: refdef}
-
-En un [artículo anterior hablé del algoritmo genético]({% post_url 2020-05-27-algoritmos-geneticos %}) y en esta ocasión vamos a resolver un problema usando ese algoritmo. El problema que elegí es como generar una combinación de números que sea _más probable_ de ganar EuroMillones.
 
 EuroMillones es una lotería que se juega en varios paises de Europa. El primer sorteo fue en el 2004 y cada semana hay 2 sorteos. Durante el sorteo se extraen 5 bolas de una máquina con 50 bolas númeradas seguido de 2 bolas que se extraen de otra máquina con 12 bolas numeradas. Por lo tanto, se juega con cinco números del 1 al 50 y dos números del 1 al 12 (estrellas de la suerte).
 

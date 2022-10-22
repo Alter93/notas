@@ -10,7 +10,7 @@ layout: default
   {{ content }}
 
   {%- if site.posts.size > 0 -%}
-    <h2 class="post-list-heading">{{ page.list_title | default: "Entradas" }}</h2>
+    
     <ul class="post-list">
       {%- for post in site.posts -%}
       <li>
@@ -22,7 +22,7 @@ layout: default
           </a>
         </h3>
         {%- if site.show_excerpts -%}
-          {{ post.excerpt }}
+          <span class="post-summary">{{ post.excerpt }}</span>
         {%- endif -%}
       </li>
       {%- endfor -%}

@@ -8,6 +8,10 @@ categories: notas
 
 Esta semana se me ocurrió volver a hacer una tarea de la universidad que me gusta mucho. Crear un programa en el que se pueda sub-administrar un pedazo de memoria.
 
+{:refdef: style="text-align: center;" }
+![My Image](/notas/assets/memoria-c/background.jpg){:width="100%"}
+{: refdef}
+
 Este programa debe ser capaz de manejar lo siguiente:
 - Iniciar (N): pedir al sistema operativo un pedazo de memoria de tamaño N bytes, donde N es potencia de 2.
 - Reservar espacio (X): sub-reservar un espacio dentro de nuestra memoria, de tamaño X \| X <= N
