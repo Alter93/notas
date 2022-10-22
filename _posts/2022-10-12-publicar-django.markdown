@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Publicar proyecto de Django con Nginx"
-date:   2022-10-22 18:00:00 -0500
+date:   2022-10-22 10:21:00 -0500
 author:   "Alejandro Alvarez"
 categories: notas
 ---
